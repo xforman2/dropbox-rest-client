@@ -22,11 +22,11 @@
 
     <!-- Connect Button -->
     <button id="connectBtn">Connect</button>
+    <button id="accountBtn" disabled>Account Info</button>
     <div id="accountInfo"></div>
 
     <hr>
 
-    <!-- Upload Form -->
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" required>
         <button type="submit" id="uploadBtn" disabled>Upload</button>
@@ -35,28 +35,41 @@
 
     <hr>
 
-    <!-- ListBox -->
     <button id="listBtn" disabled>List Files</button>
     <ul id="fileList"></ul>
 
     <hr>
 
-    <!-- Download -->
     <button id="downloadBtn" disabled>Download Selected File</button>
     <div id="downloadStatus"></div>
 
     <script>
         const connectBtn = document.getElementById("connectBtn");
+        const accountBtn = document.getElementById("accountBtn");
         const listBtn = document.getElementById("listBtn");
         const uploadBtn = document.getElementById("uploadBtn");
         const downloadBtn = document.getElementById("downloadBtn");
 
-        // Connect → go to OAuth servlet
+
         connectBtn.addEventListener("click", () => {
             window.location.href = "DboxAuth";
         });
 
-        // Upload
+
+        accountBtn.addEventListener("click", () => {
+            fetch("DboxAccount")
+            .then(response => response.json())
+            .then(info => {
+                document.getElementById("accountInfo").innerHTML =
+                    `<p><strong>Name:</strong> ${info.name.display_name}</p>
+                     <p><strong>Email:</strong> ${info.email}</p>`;
+            })
+            .catch(err => {
+                document.getElementById("accountInfo").innerText = "Error fetching account info: " + err;
+            });
+        });
+
+
         document.getElementById("uploadForm").addEventListener("submit", (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -70,7 +83,7 @@
             });
         });
 
-        // List Files
+
         listBtn.addEventListener("click", () => {
             fetch("DboxList")
             .then(response => response.json())
@@ -94,7 +107,7 @@
             .catch(err => console.error(err));
         });
 
-        // Download Selected File
+
         downloadBtn.addEventListener("click", () => {
             const selected = document.querySelector("#fileList li.selected");
             if (!selected) {
@@ -105,31 +118,34 @@
             window.open(`DboxDownload?file=${encodeURIComponent(fileName)}`, "_blank");
         });
 
-        // Check token and enable/disable buttons
+
         async function checkToken() {
             try {
                 let res = await fetch("DboxList");
                 let text = await res.text();
 
                 if (text.startsWith("[") && JSON.parse(text)) {
-                    // Token exists → enable buttons
+
+                    accountBtn.disabled = false;
                     listBtn.disabled = false;
                     uploadBtn.disabled = false;
                     downloadBtn.disabled = false;
                 } else {
-                    // No token → keep them disabled
+
+                    accountBtn.disabled = true;
                     listBtn.disabled = true;
                     uploadBtn.disabled = true;
                     downloadBtn.disabled = true;
                 }
             } catch (err) {
+                accountBtn.disabled = true;
                 listBtn.disabled = true;
                 uploadBtn.disabled = true;
                 downloadBtn.disabled = true;
             }
         }
 
-        // Run on page load
+
         checkToken();
     </script>
 </div>

@@ -62,9 +62,11 @@ public class DboxToken extends HttpServlet {
             try {
                 JSONObject obj = new JSONObject(sb.toString());
                 String accessToken = obj.getString("access_token");
+                String accountId = obj.getString("account_id");
 
                 HttpSession session = request.getSession();
                 session.setAttribute("accessToken", accessToken);
+                session.setAttribute("accountId", accountId);
 
                 response.sendRedirect(request.getContextPath() + "/");
 

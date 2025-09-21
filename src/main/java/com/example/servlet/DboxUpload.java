@@ -17,7 +17,6 @@ public class DboxUpload extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        // Get access token from session
         HttpSession session = request.getSession();
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
@@ -37,7 +36,6 @@ public class DboxUpload extends HttpServlet {
             conn.setRequestProperty("Content-Type", "application/octet-stream");
             conn.setDoOutput(true);
 
-            // Upload file data
             try (InputStream is = filePart.getInputStream(); OutputStream os = conn.getOutputStream()) {
                 byte[] buffer = new byte[4096];
                 int bytesRead;
@@ -50,7 +48,6 @@ public class DboxUpload extends HttpServlet {
             if (status == 200) {
                 response.getWriter().println("<h2>⬆️ File uploaded to Dropbox: " + fileName + "</h2>");
             } else {
-                // Read error stream manually (Java 8 compatible)
                 InputStream errorStream = conn.getErrorStream();
                 StringBuilder sb = new StringBuilder();
                 byte[] buffer = new byte[4096];

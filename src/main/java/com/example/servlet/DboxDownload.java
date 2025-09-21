@@ -22,7 +22,6 @@ public class DboxDownload extends HttpServlet {
             return;
         }
 
-        // Get access token from session
         HttpSession session = request.getSession();
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken == null) {
@@ -49,7 +48,6 @@ public class DboxDownload extends HttpServlet {
                     }
                 }
             } else {
-                // Read error stream manually (Java 8)
                 InputStream errorStream = conn.getErrorStream();
                 StringBuilder sb = new StringBuilder();
                 byte[] buffer = new byte[4096];

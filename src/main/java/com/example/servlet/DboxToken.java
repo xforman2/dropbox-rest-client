@@ -22,7 +22,6 @@ public class DboxToken extends HttpServlet {
         String code = request.getParameter("code");
 
         if (code == null) {
-            // Step 1: Redirect to Dropbox OAuth
             String authUrl = "https://www.dropbox.com/oauth2/authorize" +
                     "?response_type=code" +
                     "&client_id=" + URLEncoder.encode(CLIENT_ID, "UTF-8") +
@@ -31,7 +30,6 @@ public class DboxToken extends HttpServlet {
             return;
         }
 
-        // Step 2: Exchange authorization code for access token
         URL url = new URL("https://api.dropboxapi.com/oauth2/token");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -68,7 +66,6 @@ public class DboxToken extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("accessToken", accessToken);
 
-                // Redirect back to root after success
                 response.sendRedirect(request.getContextPath() + "/");
 
             } catch (Exception e) {

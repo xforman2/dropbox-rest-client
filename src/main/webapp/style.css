@@ -1,0 +1,37 @@
+@charset "UTF-8";
+body {
+font-family: Arial, sans-serif;
+ margin: 40px; 
+ background-color:#E0F7FA;
+ display:flex;
+align-items:center;
+justify-content:center;
+ }
+button, input { 
+	margin: 10px 0; 
+    padding: 10px; 
+    font-family:inherit;
+    font-size: 16px;
+    
+    }
+        
+        
+#fileList { 
+        margin-top:
+         20px; 
+         list-style: none; 
+         padding-left: 0; }
+         
+ li{
+         margin-bottom: 5px;
+          cursor: pointer;
+           padding: 5px; }
+           
+ li.selected { background-color: #cce5ff; }
+ 
+ .he{
+ color:#1A237E;
+ 	margin-bottom:50px;
+ 
+ }
+        
